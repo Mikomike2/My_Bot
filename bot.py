@@ -2,7 +2,8 @@ from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
 import os
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")  # ✅ Securely read token from Railway environment
+BOT_TOKEN = "7347792005:AAEYlLgpsbU7iNvPugBr7rVdRZD9kkM7TrI"  # Hardcoded token
+
 user_state = {}
 
 def reset_state(user_id):
