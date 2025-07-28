@@ -1,0 +1,58 @@
+# Import necessary libraries for data manipulation
+import pandas as pd  # Pandas for handling and manipulating data
+pd.set_option('display.max_columns', None)  # Ensures that all columns are displayed when viewing the data
+
+# Import libraries for machine learning and model evaluation
+from sklearn.model_selection import train_test_split  # For splitting data into training and testing sets
+from sklearn.linear_model import LogisticRegression   # Logistic Regression model for binary classification
+from sklearn.metrics import classification_report     # For generating a detailed classification report
+
+# Load CSV file from Google Drive into a DataFrame
+df = pd.read_csv('/content/drive/My Drive/logisticDS.csv', index_col=0)  # Update path for Google Drive
+
+# Display the first few rows and summary of the DataFrame to understand its structure
+print(df.head())  # Shows the first five rows of the dataset
+print(df.info())  # Provides a summary of the dataset, including columns and data types
+
+# Drop unnecessary column
+df = df.drop('Unnamed: 32', axis=1)  # Removes the extra column ('Unnamed: 32') that may contain only NaN values
+
+# Select columns for model input
+cols = [
+    'diagnosis',
+    'radius_mean',
+    'texture_mean',
+    'area_mean',
+    'smoothness_mean',
+    'compactness_mean',
+    'concavity_mean',
+    'concave points_mean',
+    'symmetry_mean',
+    'fractal_dimension_mean'
+]
+
+# Assign selected columns to x and y variables
+x = df[cols]                # Select the columns needed for the model
+x = x.drop("diagnosis", axis=1)  # Remove 'diagnosis' column from x (features) as it will be used as the target variable
+y = df["diagnosis"]         # Target variable 'diagnosis' for predicting
+
+# Display the features and target variables to verify correctness
+print(x)  # Display features
+print(y)  # Display target
+
+# Split dataset into training (70%) and testing sets (30%)
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3)
+
+# Initialize and fit the Logistic Regression model
+model = LogisticRegression()
+logistic_fit = model.fit(x_train, y_train)  # Train the model using training data
+
+# Predict diagnosis values using the test dataset
+predictions = logistic_fit.predict(x_test)  # Make predictions on test data
+print(predictions[1:10])  # Display a sample of predictions (from index 1 to 9)
+
+# Model accuracy score on the test set
+print("Model Accuracy:", model.score(x_test, y_test))  # Provides a score for model accuracy
+
+# Generate a detailed classification report for evaluation
+print(classification_report(y_test, predictions))  # Displays precision, recall, F1-score, and support for each class
